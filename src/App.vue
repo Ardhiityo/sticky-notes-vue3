@@ -13,7 +13,12 @@ import { reactive } from 'vue';
     </header>
 
     <section>
-      [Memo]
+      
+      <div>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta culpa pariatur expedita ipsum quae autem, obcaecati, beatae fuga eos officiis, non ut possimus cumque quaerat consectetur saepe ea sunt sed.</p>
+        <p>12/12/2023</p>
+      </div>
+      
     </section>
   </main>
 
@@ -46,4 +51,22 @@ header button {
   cursor: pointer;
   background-color: rgb(125, 204, 207);
 }
+
+section {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+div {
+  width: 30%;
+  padding: 15px;
+  background-color: rgb(124, 202, 204);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 5px;
+}
+
 </style>
