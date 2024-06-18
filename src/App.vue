@@ -1,36 +1,70 @@
 <script setup>
+import { ref } from "vue";
 
-import { reactive } from 'vue';
+const showItem = ref(false);
+const newMemo = ref("");
+const itemMemo = ref([]);
+const errorMessage = ref("");
 
+function addItem() {
+  if (!newMemo.value) return (errorMessage.value = "Please enter a memo!");
+  itemMemo.value.push({
+    id: Date.now(),
+    memo: newMemo.value,
+    color: addColor(),
+    date: new Date().toLocaleString("id-ID"),
+  });
+  newMemo.value = "";
+  showItem.value = false;
+}
+
+function addColor() {
+  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+}
+
+function deleteItem(id) {
+  return (itemMemo.value = itemMemo.value.filter((item) => item.id !== id));
+}
 </script>
 
 <template>
-
   <main>
     <header>
       <h1>Memo</h1>
-      <button>+</button>
+      <button @click="showItem = !showItem">+</button>
     </header>
 
     <section>
-
-      <div class="content">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta culpa pariatur expedita ipsum quae autem,
-          obcaecati, beatae fuga eos officiis, non ut possimus cumque quaerat consectetur saepe ea sunt sed.</p>
-        <p>12/12/2023</p>
+      <div
+        v-for="(item, index) in itemMemo"
+        :key="index"
+        class="content"
+        :style="{ backgroundColor: item.color }"
+      >
+        <p>{{ item.memo }}</p>
+        <div class="footer">
+          <p>{{ item.date }}</p>
+          <button @click="deleteItem(item.id)">X</button>
+        </div>
       </div>
-
     </section>
   </main>
 
-  <div class="modal">
+  
+  <div class="modal" v-if="showItem">
     <div class="content-modal">
-      <button class="btn-close">X</button>
-      <textarea class="modal-text" name="modal" cols="30" rows="10"></textarea>
-      <button class="btn-save">Save</button>
+      <p v-if="!newMemo" class="error-message">{{ errorMessage }}</p>
+      <button class="btn-close" @click="showItem = !showItem">X</button>
+      <textarea
+        class="modal-text"
+        v-model="newMemo"
+        name="modal"
+        cols="30"
+        rows="10"
+      ></textarea>
+      <button class="btn-save" @click="addItem()">Save</button>
     </div>
   </div>
-
 </template>
 
 <style scoped>
@@ -75,7 +109,15 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   border-radius: 5px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
 }
 
 .modal {
@@ -91,7 +133,7 @@ section {
 }
 
 .content-modal {
-  background-color: rgb(212, 212, 212);
+  background-color: white;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -132,8 +174,11 @@ section {
   justify-content: center;
   border: none;
   cursor: pointer;
-  background-color: rgb(192, 192, 192);
+  background-color: rgb(178, 178, 178);
   font-size: large;
 }
 
+.error-message {
+  color: red;
+}
 </style>
